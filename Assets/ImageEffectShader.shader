@@ -3,6 +3,9 @@ Shader "Hidden/ImageEffectShader"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _BlueTint("Blue Tint", Range(0,2)) = 1.0
+        _GreenTint("Green Tint",Range(0,2)) = 1.0
+        _RedTint("Red Tint",Range(0,2)) = 1.0
     }
     SubShader
     {
@@ -38,12 +41,17 @@ Shader "Hidden/ImageEffectShader"
             }
 
             sampler2D _MainTex;
+            float _BlueTint;
+            float _RedTint;
+            float _GreenTint;
 
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
                 // just invert the colors
-                col.rgb = 1 - col.rgb;
+                col.b *= _BlueTint;
+                col.r *= _RedTint;
+                col.g *= _GreenTint;
                 return col;
             }
             ENDCG
