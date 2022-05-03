@@ -30,6 +30,7 @@ Shader "Hidden/ImageEffectShader"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float change : TEXCOORD1;
             };
 
             v2f vert (appdata v)
@@ -37,6 +38,7 @@ Shader "Hidden/ImageEffectShader"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
+                o.change = _SinTime;
                 return o;
             }
 
@@ -49,7 +51,7 @@ Shader "Hidden/ImageEffectShader"
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
                 // just invert the colors
-                col.b *= _BlueTint;
+                col.b *= _BlueTint * i.change;
                 col.r *= _RedTint;
                 col.g *= _GreenTint;
                 return col;
